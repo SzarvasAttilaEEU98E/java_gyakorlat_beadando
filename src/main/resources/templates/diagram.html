@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Közös HEAD: Bootstrap 5 és saját CSS -->
+<head th:replace="~{fragments/head :: head('Bevételi diagram')}"></head>
+
+<body>
+
+<!-- Közös navigációs menü -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Oldal tartalma -->
+<main class="container py-5">
+
+    <!-- Oldal címe -->
+    <section class="text-center mb-5">
+
+        <h1 class="display-5 fw-bold">
+            Top 10 legnagyobb bevételű mozi
+        </h1>
+
+        <p class="lead text-secondary">
+            Az adatbázisban szereplő mozik
+            bevételeinek grafikus megjelenítése.
+        </p>
+
+    </section>
+
+    <!-- Diagram kártya -->
+    <section class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h2 class="h4 mb-3 text-center">
+                Mozik összes bevétele
+            </h2>
+
+            <p class="text-secondary text-center">
+                Az alábbi diagram az adatbázisban
+                szereplő előadások bevételeit
+                összesíti mozinként.
+            </p>
+
+            <p class="text-secondary text-center mb-4">
+                A mozik a teljes bevételük alapján,
+                csökkenő sorrendben jelennek meg.
+            </p>
+
+            <!-- Diagram -->
+            <div class="diagram-container">
+
+                <canvas id="bevetelDiagram"
+                        role="img"
+                        aria-label="A tíz legnagyobb bevételű mozi diagramja">
+                </canvas>
+
+            </div>
+
+            <!-- Üres adatok kezelése -->
+            <div id="uresAdatok"
+                 class="alert alert-info text-center mt-4"
+                 role="alert"
+                 style="display: none;">
+
+                Jelenleg nincs megjeleníthető bevételi adat.
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Összesítés -->
+    <section class="card shadow-sm border-0 mt-4">
+
+        <div class="card-body p-4 text-center">
+
+            <h2 class="h4 mb-3">
+                Top 10 mozi összesített bevétele
+            </h2>
+
+            <p id="osszesBevetel"
+               class="display-6 fw-bold text-primary mb-0">
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Visszanavigálás -->
+    <div class="mt-4">
+
+        <a th:href="@{/}"
+           class="btn btn-outline-secondary">
+            Vissza a főoldalra
+        </a>
+
+        <a th:href="@{/adatbazis}"
+           class="btn btn-outline-primary ms-2">
+            Adatbázis áttekintése
+        </a>
+
+    </div>
+
+</main>
+
+<!-- Közös lábléc -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JavaScript -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+<!-- Chart.js könyvtár -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart.js diagram létrehozása -->
+<script th:inline="javascript">
+
+    // Thymeleaf által átadott adatok
+    const diagramAdatok = /*[[${diagramAdatok}]]*/ [];
+
+    // Mozik nevei
+    const moziNevek = diagramAdatok.map(adat => adat[0]);
+
+    // Mozik összes bevételei
+    const moziBevetelek = diagramAdatok.map(
+        adat => Number(adat[1])
+    );
+
+    // Forint formázás
+    const forintFormatter = new Intl.NumberFormat('hu-HU', {
+        style: 'currency',
+        currency: 'HUF',
+        maximumFractionDigits: 0
+    });
+
+    // Top 10 mozi teljes bevétele
+    const osszesBevetel = moziBevetelek.reduce(
+        (osszeg, bevetel) => osszeg + bevetel,
+        0
+    );
+
+    document.getElementById('osszesBevetel').textContent =
+        forintFormatter.format(osszesBevetel);
+
+    // Diagram vászon
+    const canvas = document.getElementById('bevetelDiagram');
+
+    // Üres lista kezelése
+    if (diagramAdatok.length === 0) {
+
+        canvas.style.display = 'none';
+
+        document.getElementById('uresAdatok').style.display =
+            'block';
+
+    } else {
+
+        new Chart(canvas, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: moziNevek,
+
+                datasets: [{
+                    label: 'Összes bevétel (Ft)',
+                    data: moziBevetelek,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+
+            },
+
+            options: {
+
+                indexAxis: 'y',
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: true
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Bevétel: ' +
+                                    forintFormatter.format(context.parsed.x);
+                            }
+                        }
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        beginAtZero: true,
+
+                        title: {
+                            display: true,
+                            text: 'Összes bevétel (Ft)'
+                        },
+
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('hu-HU', {
+                                    notation: 'compact',
+                                    maximumFractionDigits: 1
+                                }).format(value) + ' Ft';
+                            }
+                        }
+
+                    },
+
+                    y: {
+
+                        title: {
+                            display: true,
+                            text: 'Mozik'
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+</script>
+
+<!-- Diagram méretezése -->
+<style>
+    .diagram-container {
+        position: relative;
+        width: 100%;
+        height: 550px;
+    }
+
+    @media (max-width: 768px) {
+        .diagram-container {
+            height: 450px;
+        }
+    }
+</style>
+
+</body>
+</html>
