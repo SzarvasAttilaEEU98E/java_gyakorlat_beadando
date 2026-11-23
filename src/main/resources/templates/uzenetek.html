@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Közös HEAD: Bootstrap 5 és saját CSS -->
+<head th:replace="~{fragments/head :: head('Üzenetek')}"></head>
+
+<body>
+
+<!-- Közös navigációs menü -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Oldal tartalma -->
+<main class="container py-5">
+
+    <!-- Oldal címe -->
+    <section class="mb-4">
+
+        <h1 class="display-5 fw-bold">
+            Beérkezett üzenetek
+        </h1>
+
+        <p class="lead text-secondary">
+            A kapcsolatfelvételi űrlapon keresztül
+            érkezett üzenetek megtekintése.
+        </p>
+
+    </section>
+
+    <!-- Üzenetek kártya -->
+    <section class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h2 class="h4 mb-3">
+                Kapcsolatfelvételi üzenetek
+            </h2>
+
+            <p class="text-secondary mb-4">
+                Az üzenetek a küldés időpontja szerint,
+                a legfrissebbtől a legrégebbi felé
+                jelennek meg.
+            </p>
+
+            <!-- Ha nincs üzenet -->
+            <div class="alert alert-info"
+                 th:if="${#lists.isEmpty(uzenetek)}"
+                 role="alert">
+
+                Jelenleg nincs beérkezett üzenet.
+
+            </div>
+
+            <!-- Üzenetek táblázata -->
+            <div class="table-responsive"
+                 th:unless="${#lists.isEmpty(uzenetek)}">
+
+                <table class="table table-striped
+                              table-hover table-bordered
+                              align-middle">
+
+                    <thead class="table-dark">
+
+                    <tr>
+                        <th scope="col">Azonosító</th>
+                        <th scope="col">Feladó neve</th>
+                        <th scope="col">E-mail-cím</th>
+                        <th scope="col">Tárgy</th>
+                        <th scope="col">Üzenet</th>
+                        <th scope="col">Küldés időpontja</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="uzenet : ${uzenetek}">
+
+                        <td th:text="${uzenet.id}"></td>
+
+                        <td th:text="${uzenet.nev}"></td>
+
+                        <td th:text="${uzenet.email}"></td>
+
+                        <td th:text="${uzenet.targy}"></td>
+
+                        <td class="uzenet-szoveg"
+                            th:text="${uzenet.szoveg}">
+                        </td>
+
+                        <td th:text="${#temporals.format(
+                                uzenet.kuldesIdeje,
+                                'yyyy.MM.dd HH:mm:ss'
+                            )}">
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Visszanavigálás -->
+    <div class="mt-4">
+
+        <a th:href="@{/}"
+           class="btn btn-outline-secondary">
+            Vissza a főoldalra
+        </a>
+
+    </div>
+
+</main>
+
+<!-- Közös lábléc -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JavaScript -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+<!-- Üzenetszöveg formázása -->
+<style>
+    .uzenet-szoveg {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        min-width: 220px;
+        max-width: 450px;
+    }
+</style>
+
+</body>
+</html>
