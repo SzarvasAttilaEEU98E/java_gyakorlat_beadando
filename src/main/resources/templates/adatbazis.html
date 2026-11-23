@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Közös HEAD: Bootstrap 5 és saját CSS -->
+<head th:replace="~{fragments/head :: head('Adatbázis')}"></head>
+
+<body>
+
+<!-- Közös navigációs menü -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Oldal tartalma -->
+<main class="container py-5">
+
+    <!-- Oldal címe -->
+    <section class="text-center mb-5">
+
+        <h1 class="display-5 fw-bold">
+            Adatbázis áttekintése
+        </h1>
+
+        <p class="lead text-secondary">
+            Ezen az oldalon megtekinthetők
+            a Mozi nyilvántartó alkalmazás
+            adatbázisában tárolt filmek,
+            mozik és előadások.
+        </p>
+
+    </section>
+
+    <!-- Adatbázis kártyák -->
+    <section class="row g-4">
+
+        <!-- Filmek -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <article class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h2 class="card-title h4 mb-3">
+                        Filmek
+                    </h2>
+
+                    <p class="card-text text-secondary">
+                        Az adatbázisban szereplő filmek
+                        címe, megjelenési éve és
+                        játékideje.
+                    </p>
+
+                    <p class="card-text">
+                        Adatbázistábla:
+                        <strong>film</strong>
+                    </p>
+
+                    <a th:href="@{/filmek}"
+                       class="btn btn-primary mt-auto">
+                        Filmek megtekintése
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <!-- Mozik -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <article class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h2 class="card-title h4 mb-3">
+                        Mozik
+                    </h2>
+
+                    <p class="card-text text-secondary">
+                        A nyilvántartásban szereplő
+                        mozik neve, városa és
+                        befogadóképessége.
+                    </p>
+
+                    <p class="card-text">
+                        Adatbázistábla:
+                        <strong>mozi</strong>
+                    </p>
+
+                    <a th:href="@{/mozik}"
+                       class="btn btn-primary mt-auto">
+                        Mozik megtekintése
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <!-- Előadások -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+            <article class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h2 class="card-title h4 mb-3">
+                        Előadások
+                    </h2>
+
+                    <p class="card-text text-secondary">
+                        A mozielőadások dátuma,
+                        nézőszáma és bevétele,
+                        a kapcsolódó filmekkel
+                        és mozikkal.
+                    </p>
+
+                    <p class="card-text">
+                        Adatbázistábla:
+                        <strong>eloadas</strong>
+                    </p>
+
+                    <a th:href="@{/eloadasok}"
+                       class="btn btn-primary mt-auto">
+                        Előadások megtekintése
+                    </a>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <!-- Technikai információk -->
+    <section class="card shadow-sm border-0 mt-5">
+
+        <div class="card-body p-4">
+
+            <h2 class="h4 mb-3">
+                Technikai információk
+            </h2>
+
+            <p>
+                Az alkalmazás MariaDB adatbázist
+                használ Spring Data JPA segítségével.
+            </p>
+
+            <p>
+                Az adatok lekérdezése Repository
+                rétegen keresztül történik.
+            </p>
+
+            <p class="mb-0">
+                Az előadások listája lapozást
+                használ a nagy mennyiségű
+                adat hatékony megjelenítéséhez.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Visszanavigálás -->
+    <div class="mt-4">
+
+        <a th:href="@{/}"
+           class="btn btn-outline-secondary">
+            Vissza a főoldalra
+        </a>
+
+    </div>
+
+</main>
+
+<!-- Közös lábléc -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JavaScript -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+</body>
+</html>
