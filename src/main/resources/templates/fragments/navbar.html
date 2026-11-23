@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+<nav th:fragment="navbar"
+     class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <div class="container-fluid">
+
+        <!-- Alkalmazás neve -->
+        <a class="navbar-brand"
+           th:href="@{/}">
+            Mozi nyilvántartó
+        </a>
+
+        <!-- Mobilmenü gomb -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu"
+                aria-expanded="false"
+                aria-label="Navigáció megnyitása">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <!-- Navigációs menüpontok -->
+        <div class="collapse navbar-collapse"
+             id="navbarMenu">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <!-- Nyilvános oldalak -->
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/}">
+                        Főoldal
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/adatbazis}">
+                        Adatbázis
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/filmek}">
+                        Filmek
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/mozik}">
+                        Mozik
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/eloadasok}">
+                        Előadások
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/kapcsolat}">
+                        Kapcsolat
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/diagram}">
+                        Diagram
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/rest}">
+                        REST
+                    </a>
+                </li>
+
+                <!-- Bejelentkezett felhasználók -->
+                <li class="nav-item"
+                    sec:authorize="isAuthenticated()">
+
+                    <a class="nav-link"
+                       th:href="@{/uzenetek}">
+                        Üzenetek
+                    </a>
+
+                </li>
+
+                <!-- Adminisztrátorok -->
+                <li class="nav-item"
+                    sec:authorize="hasRole('ADMIN')">
+
+                    <a class="nav-link"
+                       th:href="@{/admin}">
+                        Admin
+                    </a>
+
+                </li>
+
+            </ul>
+
+            <!-- Jobb oldali felhasználói menü -->
+            <div class="d-flex flex-column flex-lg-row
+                        align-items-lg-center gap-2">
+
+                <!-- Kijelentkezett felhasználók -->
+                <div sec:authorize="isAnonymous()"
+                     class="d-flex gap-2">
+
+                    <a class="btn btn-outline-light btn-sm"
+                       th:href="@{/login}">
+                        Bejelentkezés
+                    </a>
+
+                    <a class="btn btn-warning btn-sm"
+                       th:href="@{/register}">
+                        Regisztráció
+                    </a>
+
+                </div>
+
+                <!-- Bejelentkezett felhasználók -->
+                <div sec:authorize="isAuthenticated()"
+                     class="d-flex flex-wrap align-items-center gap-2">
+
+                    <span class="text-white">
+                        Bejelentkezve:
+                        <strong sec:authentication="name"></strong>
+                    </span>
+
+                    <form th:action="@{/logout}"
+                          method="post"
+                          class="m-0">
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm">
+                            Kijelentkezés
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</body>
+</html>
