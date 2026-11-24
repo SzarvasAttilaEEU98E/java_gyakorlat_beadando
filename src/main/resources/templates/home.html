@@ -1,30 +1,99 @@
 
 <!DOCTYPE html>
-<html lang="hu" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mozi nyilvántartó</title>
-</head>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Közös HEAD: Bootstrap és saját CSS -->
+<head th:replace="~{fragments/head :: head('Főoldal')}"></head>
+
 <body>
 
-<h1>Mozi nyilvántartó</h1>
+<!-- Közös navigációs menü -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<p>Üdvözlünk a mozi nyilvántartó rendszerben!</p>
+<!-- Főoldal tartalma -->
+<main class="container py-5">
 
-<nav>
-    <a th:href="@{/}">Főoldal</a>
-    <a th:href="@{/login}">Bejelentkezés</a>
-    <a th:href="@{/register}">Regisztráció</a>
-</nav>
+    <section class="cinema-hero mb-5">
+        <div class="cinema-hero__copy">
+            <p class="cinema-eyebrow">Filmek. Mozik. Történetek.</p>
+            <h1 class="display-4 fw-bold">Mozi nyilvántartó</h1>
+            <p class="lead">
+                A mozi több mint egy vászon: közös élmény.
+                Fedezd fel a filmeket, a mozikat és a vetítések adatait egy helyen!
+            </p>
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <a th:href="@{/filmek}" class="btn btn-warning">Filmek felfedezése</a>
+                <a th:href="@{/mozik}" class="btn btn-outline-light">Mozik megtekintése</a>
+            </div>
+        </div>
+        <img th:src="@{/images/cinema-hall.jpg}"
+             class="cinema-hero__image"
+             alt="Piros székekkel berendezett moziterem"
+             width="1400" height="933" fetchpriority="high">
+    </section>
 
-<hr>
+    <section class="row justify-content-center">
 
-<h2>Bemutatkozás</h2>
-<p>
-    Az alkalmazásban filmeket, mozikat és előadásokat
-    tekinthetsz meg.
-</p>
+        <div class="col-lg-9">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="card-title mb-3">
+                        Bemutatkozás
+                    </h2>
+
+                    <p class="card-text">
+                        Az alkalmazásban filmeket,
+                        mozikat és előadásokat
+                        tekinthetsz meg. Böngéssz a történetek között,
+                        és ismerd meg a vetítések világát számokban is.
+                    </p>
+
+                    <p class="card-text">
+                        A rendszer lehetőséget biztosít
+                        a regisztrációra, bejelentkezésre,
+                        üzenetküldésre és az adatbázis
+                        adatainak megtekintésére.
+                    </p>
+
+                    <p class="card-text">
+                        Az adminisztrátorok a filmek,
+                        mozik és előadások adatait
+                        kezelhetik.
+                    </p>
+
+                    <div class="mt-4">
+
+                        <a th:href="@{/adatbazis}"
+                           class="btn btn-primary me-2 mb-2">
+                            Adatbázis megtekintése
+                        </a>
+
+                        <a th:href="@{/diagram}"
+                           class="btn btn-outline-primary mb-2">
+                            Diagram megtekintése
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Közös lábléc -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Közös JavaScript -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

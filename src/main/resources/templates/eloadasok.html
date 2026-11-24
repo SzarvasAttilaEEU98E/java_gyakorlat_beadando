@@ -1,97 +1,172 @@
 
 <!DOCTYPE html>
-<html lang="hu" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <title>Előadások - Mozi nyilvántartó</title>
-</head>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Közös HEAD: Bootstrap 5 és saját CSS -->
+<head th:replace="~{fragments/head :: head('Előadások')}"></head>
+
 <body>
 
-<h1>Előadások listája</h1>
+<!-- Közös navigációs menü -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Navigáció -->
-<nav>
-    <a th:href="@{/}">Főoldal</a>
-    |
-    <a th:href="@{/filmek}">Filmek</a>
-    |
-    <a th:href="@{/mozik}">Mozik</a>
-    |
-    <a th:href="@{/eloadasok}">Előadások</a>
-</nav>
+<!-- Oldal tartalma -->
+<main class="container py-5">
 
-<hr>
+    <!-- Oldal címe -->
+    <section class="page-intro mb-4">
+        <div>
+            <p class="cinema-eyebrow">Amikor elindul a vetítés</p>
+            <h1 class="display-5 fw-bold">Előadások listája</h1>
+            <p class="text-secondary mb-0">
+                A filmek a vetítéseken kelnek életre.
+                Tekintsd át a helyszíneket, dátumokat, nézőszámokat és bevételeket!
+            </p>
+        </div>
+        <img th:src="@{/images/film-projector.jpg}" class="page-intro__image"
+             alt="Fénysugarat vetítő régi filmvetítő"
+             width="1600" height="1067" decoding="async">
+    </section>
 
-<!-- Előadások táblázata -->
-<table border="1" cellpadding="8" cellspacing="0">
+    <!-- Előadások táblázata -->
+    <section class="card shadow-sm border-0">
 
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Film címe</th>
-        <th>Mozi neve</th>
-        <th>Dátum</th>
-        <th>Nézőszám</th>
-        <th>Bevétel (Ft)</th>
-    </tr>
-    </thead>
+        <div class="card-body p-4">
 
-    <tbody>
+            <h2 class="h4 mb-4">
+                Adatbázisban található előadások
+            </h2>
 
-    <tr th:each="eloadas : ${eloadasok.content}">
+            <div class="table-responsive">
 
-        <td th:text="${eloadas.id}"></td>
+                <table class="table table-striped table-hover
+                              table-bordered align-middle">
 
-        <td th:text="${eloadas.filmCim}"></td>
+                    <thead class="table-dark">
 
-        <td th:text="${eloadas.moziNev}"></td>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Film címe</th>
+                        <th scope="col">Mozi neve</th>
+                        <th scope="col">Dátum</th>
+                        <th scope="col">Nézőszám</th>
+                        <th scope="col">Bevétel (Ft)</th>
+                    </tr>
 
-        <td th:text="${eloadas.datum}"></td>
+                    </thead>
 
-        <td th:text="${eloadas.nezoszam}"></td>
+                    <tbody>
 
-        <td th:text="${eloadas.bevetel}"></td>
+                    <tr th:each="eloadas : ${eloadasok.content}">
 
-    </tr>
+                        <td th:text="${eloadas.id}"></td>
 
-    </tbody>
+                        <td th:text="${eloadas.filmCim}"></td>
 
-</table>
+                        <td th:text="${eloadas.moziNev}"></td>
 
-<!-- Üres lista kezelése -->
-<p th:if="${eloadasok.isEmpty()}">
-    Jelenleg nincs megjeleníthető előadás.
-</p>
+                        <td th:text="${eloadas.datum}"></td>
 
-<!-- Lapozás -->
-<div th:if="${totalPages > 1}">
+                        <td th:text="${eloadas.nezoszam}"></td>
 
-    <hr>
+                        <td th:text="${eloadas.bevetel}"></td>
 
-    <a th:if="${currentPage > 0}"
-       th:href="@{/eloadasok(page=${currentPage - 1})}">
-        Előző
-    </a>
+                    </tr>
 
-    <span>
-        Oldal:
-        <strong th:text="${currentPage + 1}"></strong>
-        /
-        <strong th:text="${totalPages}"></strong>
-    </span>
+                    </tbody>
 
-    <a th:if="${currentPage + 1 < totalPages}"
-       th:href="@{/eloadasok(page=${currentPage + 1})}">
-        Következő
-    </a>
+                </table>
 
-</div>
+            </div>
 
-<hr>
+            <!-- Üres lista kezelése -->
+            <div class="alert alert-info"
+                 th:if="${eloadasok.isEmpty()}">
 
-<a th:href="@{/}">Vissza a főoldalra</a>
+                Jelenleg nincs megjeleníthető előadás.
+
+            </div>
+
+            <!-- Lapozás -->
+            <nav class="d-flex justify-content-center mt-4"
+                 aria-label="Előadások lapozása"
+                 th:if="${totalPages > 1}">
+
+                <ul class="pagination flex-wrap">
+
+                    <!-- Előző oldal -->
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'">
+
+                        <a class="page-link"
+                           th:href="@{/eloadasok(page=${currentPage - 1})}"
+                           th:attr="aria-disabled=${currentPage == 0}">
+                            Előző
+                        </a>
+
+                    </li>
+
+                    <!-- Aktuális oldal -->
+                    <li class="page-item disabled">
+
+                        <span class="page-link">
+
+                            Oldal:
+                            <strong th:text="${currentPage + 1}"></strong>
+                            /
+                            <strong th:text="${totalPages}"></strong>
+
+                        </span>
+
+                    </li>
+
+                    <!-- Következő oldal -->
+                    <li class="page-item"
+                        th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+
+                        <a class="page-link"
+                           th:href="@{/eloadasok(page=${currentPage + 1})}"
+                           th:attr="aria-disabled=${currentPage + 1 >= totalPages}">
+                            Következő
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+    </section>
+
+    <!-- Visszanavigálás -->
+    <div class="mt-4">
+
+        <a th:href="@{/}"
+           class="btn btn-outline-secondary">
+
+            Vissza a főoldalra
+
+        </a>
+
+        <a th:href="@{/adatbazis}"
+           class="btn btn-outline-primary ms-2">
+
+            Adatbázis áttekintése
+
+        </a>
+
+    </div>
+
+</main>
+
+<!-- Közös lábléc -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JavaScript -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>

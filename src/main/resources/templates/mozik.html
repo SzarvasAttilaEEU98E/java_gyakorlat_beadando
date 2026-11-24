@@ -1,56 +1,116 @@
 
 <!DOCTYPE html>
-<html lang="hu" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mozi nyilvántartó - Mozik</title>
-</head>
+<html lang="hu"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Közös HEAD: Bootstrap 5 és saját CSS -->
+<head th:replace="~{fragments/head :: head('Mozik')}"></head>
+
 <body>
 
-<h1>Mozik listája</h1>
+<!-- Közös navigációs menü -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<nav>
-    <a th:href="@{/}">Főoldal</a>
-    |
-    <a th:href="@{/user}">Felhasználói oldal</a>
-    |
-    <a th:href="@{/filmek}">Filmek</a>
-</nav>
+<!-- Oldal tartalma -->
+<main class="container py-5">
 
-<hr>
+    <section class="page-intro mb-4">
+        <div>
+            <p class="cinema-eyebrow">Az élmény helyszínei</p>
+            <h1 class="display-5 fw-bold">Mozik listája</h1>
+            <p class="text-secondary mb-0">
+                Egy kényelmes szék, elsötétülő fények és egy jó történet.
+                Ismerd meg a mozikat, városukat és befogadóképességüket!
+            </p>
+        </div>
+        <img th:src="@{/images/cinema-hall.jpg}" class="page-intro__image page-intro__image--seats"
+             alt="Egy moziterem piros széksorai és középső lépcsője"
+             width="1400" height="933" decoding="async">
+    </section>
 
-<h2>Adatbázisban található mozik</h2>
+    <section class="card shadow-sm border-0">
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Név</th>
-        <th>Város</th>
-        <th>Férőhely</th>
-    </tr>
-    </thead>
+        <div class="card-body p-4">
 
-    <tbody>
-    <tr th:each="mozi : ${mozik}">
-        <td th:text="${mozi.id}"></td>
-        <td th:text="${mozi.nev}"></td>
-        <td th:text="${mozi.varos}"></td>
-        <td th:text="${mozi.ferohely}"></td>
-    </tr>
-    </tbody>
-</table>
+            <h2 class="h4 mb-4">
+                Adatbázisban található mozik
+            </h2>
 
-<p th:if="${#lists.isEmpty(mozik)}">
-    Jelenleg nincsenek mozik az adatbázisban.
-</p>
+            <!-- Reszponzív táblázat -->
+            <div class="table-responsive">
 
-<hr>
+                <table class="table table-striped table-hover
+                              table-bordered align-middle">
 
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Kijelentkezés</button>
-</form>
+                    <thead class="table-dark">
+
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Név</th>
+                        <th scope="col">Város</th>
+                        <th scope="col">Férőhely</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="mozi : ${mozik}">
+
+                        <td th:text="${mozi.id}"></td>
+
+                        <td th:text="${mozi.nev}"></td>
+
+                        <td th:text="${mozi.varos}"></td>
+
+                        <td th:text="${mozi.ferohely}"></td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Üres adatbázis esetén -->
+            <div class="alert alert-info"
+                 th:if="${#lists.isEmpty(mozik)}">
+
+                Jelenleg nincsenek mozik az adatbázisban.
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Visszanavigálás -->
+    <div class="mt-4">
+
+        <a th:href="@{/}"
+           class="btn btn-outline-secondary">
+
+            Vissza a főoldalra
+
+        </a>
+
+        <a th:href="@{/adatbazis}"
+           class="btn btn-outline-primary ms-2">
+
+            Adatbázis áttekintése
+
+        </a>
+
+    </div>
+
+</main>
+
+<!-- Közös lábléc -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JavaScript -->
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 
 </body>
 </html>
